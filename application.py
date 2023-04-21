@@ -2,9 +2,16 @@ import streamlit as st
 
 import pickle
 import requests
+import gzip
 
 movies = pickle.load(open("movies.pkl", "rb"))
-similarity = pickle.load(open("similarity.pkl", "rb"))
+
+def load_zipped_pickle(filename):
+    with gzip.open(filename, 'rb') as f:
+        loaded_object = pickle.load(f)
+        return loaded_object
+
+similarity = load_zipped_pickle("similarity.pkl")
 
 def fetch_poster(movie_id):
     response = requests.get("https://api.themoviedb.org/3/movie/{}?api_key=7abe55021fbd937945a1d7fc5a996fb5&language=en-US_id".format(movie_id))
